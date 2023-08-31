@@ -4,7 +4,7 @@
 show_progress() {
     local total_steps=$1
     local current_step=0
-    
+
     while [ $current_step -le $total_steps ]; do
         echo -ne "Processing: ${current_step}%\r"
         sleep 0.5
@@ -56,8 +56,7 @@ echo "All Installations Were Already done!, you can check your node
       sudo journalctl -f -u chainflip-*
         "
     ;;
-    
-  
+
   2)
     #For Auto Sync Installation
     echo "Running Auto Sync Installation..."
@@ -100,7 +99,7 @@ echo "All Installations Were Already done!, you can check your node
     # Rotate node
     {
         sudo chainflip-cli --config-root /etc/chainflip rotate
-    } 
+    }
 
     ;;
 
@@ -119,7 +118,7 @@ echo "All Installations Were Already done!, you can check your node
     6)
     #to restart the node & the engine
     {
-        sudo systemctl restart chainflip-node 
+        sudo systemctl restart chainflip-node
         sudo systemctl restart chainflip-engine
     } & show_progress 100
 
@@ -127,7 +126,7 @@ echo "All Installations Were Already done!, you can check your node
     ;;
 
 
-    7) 
+    7)
     # to check logs
     {
         sudo journalctl -f -u chainflip-*
@@ -141,7 +140,7 @@ echo "All Installations Were Already done!, you can check your node
     }
     ;;
 
-    
+
       *)
     echo "Choise is not valid."
     ;;
