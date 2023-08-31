@@ -51,11 +51,12 @@ case $choice in
         sudo systemctl -f -u chainflip-engine > /dev/null 2>&1
     } & show_progress 100
 
-echo "All Installations Were Already done!, you can check your node 
+echo "All Installations Were Already done!, you can check your node
       by execute this command below
       sudo journalctl -f -u chainflip-*
         "
     ;;
+
 
   2)
     #For Auto Sync Installation
@@ -99,7 +100,7 @@ echo "All Installations Were Already done!, you can check your node
     # Rotate node
     {
         sudo chainflip-cli --config-root /etc/chainflip rotate
-    }
+    } 
 
     ;;
 
