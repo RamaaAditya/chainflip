@@ -24,11 +24,12 @@ echo "
 echo "Choose what do you want:"
 echo "1. Fixing Chainflip node problem"
 echo "2. Upgrade the node ( CFE Version )"
-echo "3. Rotate your node"
-echo "4. Change your vanity name"
-echo "5. Restart the node and the engine"
-echo "6. Check logs"
-echo "7. Recovery your pharse"
+echo "3. Update boot node"
+echo "4. Rotate your node"
+echo "5. Change your vanity name"
+echo "6. Restart the node and the engine"
+echo "7. Check logs"
+echo "8. Recovery your pharse"
 read -p "Your choice: " choice
 
 case $choice in
@@ -73,13 +74,30 @@ echo "All Installations Were Already done!, you can check your node
     ;;
 
     3)
+    #Update bootnode
+    {
+        sudo systemctl stop chainflip-node
+        sudo systemctl stop chainflip-engine
+        sudo rm -rf /etc/chainflip/perseverance.chainspec.json
+        sudo apt install git > /dev/null 2>&1
+        sudo git clone https://github.com/RamaaAditya/chainflip-0.9.git > /dev/null 2>&1
+        sudo cp -r ./chainflip-0.9/perseverance.chainspec.json /etc/chainflip/
+        sudo rm -rf ./chainflip-0.9
+        sudo systemctl daemon-reload > /dev/null 2>&1
+        sudo systemctl start chainflip-node > /dev/null 2>&1
+        sudo systemctl start chainflip-engine > /dev/null 2>&1
+        
+    }
+    ;;
+
+    4)
     # Rotate node
     {
         sudo chainflip-cli --config-root /etc/chainflip rotate
     }
     ;;
 
-    4)
+    5)
     # to change vanity name
     echo "Input your vanity name ( highly recomended to use your discord name )"
     read -p "Input your vanity name: " vanity
@@ -88,7 +106,7 @@ echo "All Installations Were Already done!, you can check your node
     }
     ;;
 
-    5)
+    6)
     #to restart the node & the engine
     {
         sudo systemctl restart chainflip-node
@@ -99,14 +117,14 @@ echo "All Installations Were Already done!, you can check your node
     ;;
 
 
-    6)
+    7)
     # to check logs
     {
         sudo journalctl -f -u chainflip-*
     }
     ;;
 
-    7)
+    8)
     {
       chainflip-node key inspect "0x$(sudo cat /etc/chainflip/keys/signing_key_file)"
     }
