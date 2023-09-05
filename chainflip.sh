@@ -13,7 +13,7 @@ show_progress() {
     echo -ne "Installation complete: 100%\n"
 }
 
-echo -p "
+echo "
 ░█████╗░██╗░░██╗░█████╗░██╗███╗░░██╗███████╗██╗░░░░░██╗██████╗░
 ██╔══██╗██║░░██║██╔══██╗██║████╗░██║██╔════╝██║░░░░░██║██╔══██╗
 ██║░░╚═╝███████║███████║██║██╔██╗██║█████╗░░██║░░░░░██║██████╔╝
@@ -22,25 +22,24 @@ echo -p "
 ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░░░░╚═══  @RamaAditya"
 
 echo "Choose what do you want:"
-echo "1. Fix Chainflip"
-echo "2. Auto Sync Installation"
-echo "3. Upgrade the node ( CFE Version )"
-echo "4. Rotate your node"
-echo "5. Change your vanity name"
-echo "6. Restart the node and the engine"
-echo "7. Check logs"
-echo "8. Recovery your pharse"
+echo "1. Fixing Chainflip node problem"
+echo "2. Upgrade the node ( CFE Version )"
+echo "3. Rotate your node"
+echo "4. Change your vanity name"
+echo "5. Restart the node and the engine"
+echo "6. Check logs"
+echo "7. Recovery your pharse"
 read -p "Your choice: " choice
 
 case $choice in
   1)
-    # Step 1: Install System
+    # for fixing the chainflip's node problem
     {
         sudo systemctl stop chainflip-node > /dev/null 2>&1
         sudo systemctl stop chainflip-engine > /dev/null 2>&1
         sudo rm -rf /lib/systemd/system/chainflip-node.service
         sudo rm -rf /etc/chainflip/perseverance.chainspec.json
-        sudo rm -rf /etc/chainflip/chaindata
+        sudo chainflip-node purge-chain --chain /etc/chainflip/perseverance.chainspec.json --base-path /etc/chainflip/chaindata/
         sudo apt install git > /dev/null 2>&1
         sudo git clone https://github.com/RamaaAditya/chainflip-0.9.git > /dev/null 2>&1
         sudo cp -r ./chainflip-0.9/chainflip-node.service /lib/systemd/system/
@@ -48,38 +47,15 @@ case $choice in
         sudo rm -rf ./chainflip-0.9
         sudo systemctl daemon-reload > /dev/null 2>&1
         sudo systemctl start chainflip-node > /dev/null 2>&1
-        sudo systemctl -f -u chainflip-engine > /dev/null 2>&1
+        sudo systemctl start chainflip-engine > /dev/null 2>&1
     } & show_progress 100
 
 echo "All Installations Were Already done!, you can check your node
       by execute this command below
-      sudo journalctl -f -u chainflip-*
-        "
+      sudo journalctl -f -u chainflip-*"
     ;;
 
-
-  2)
-    #For Auto Sync Installation
-    echo "Running Auto Sync Installation..."
-    {
-        sudo systemctl stop chainflip-node
-        sudo systemctl stop chainflip-engine
-        sudo rm -rf /lib/systemd/system/chainflip-node.service
-        sudo rm -rf /etc/chainflip/chaindata
-        sudo apt install git > /dev/null 2>&1
-        sudo git clone https://github.com/RamaaAditya/chainflip-0.9.git > /dev/null 2>&1
-        sudo cp -r ./chainflip-0.9/chainflip-node.service /lib/systemd/system/
-        sudo rm -rf ./chainflip-0.9
-        sudo systemctl daemon-reload
-        sudo systemctl start chainflip-node
-        sudo systemctl -f -u chainflip-engine
-
-    } & show_progress 100
-
-    echo "Auto Sync Installation was already done."
-    ;;
-
-    3)
+    2)
     # For Update Chainflip version 0.8 -> 0.9
     {
         sudo systemctl stop chainflip-node
@@ -96,27 +72,23 @@ echo "All Installations Were Already done!, you can check your node
 
     ;;
 
-    4)
+    3)
     # Rotate node
     {
         sudo chainflip-cli --config-root /etc/chainflip rotate
-    } 
-
+    }
     ;;
 
-    5)
+    4)
     # to change vanity name
     echo "Input your vanity name ( highly recomended to use your discord name )"
     read -p "Input your vanity name: " vanity
     {
-
         sudo chainflip-cli --config-root /etc/chainflip vanity-name $vanity
-
     }
-
     ;;
 
-    6)
+    5)
     #to restart the node & the engine
     {
         sudo systemctl restart chainflip-node
@@ -127,15 +99,14 @@ echo "All Installations Were Already done!, you can check your node
     ;;
 
 
-    7)
+    6)
     # to check logs
     {
         sudo journalctl -f -u chainflip-*
     }
-
     ;;
 
-    8)
+    7)
     {
       chainflip-node key inspect "0x$(sudo cat /etc/chainflip/keys/signing_key_file)"
     }
