@@ -87,7 +87,8 @@ echo "All Installations Were Already done!, you can check your node
         sudo systemctl start chainflip-node > /dev/null 2>&1
         sudo systemctl start chainflip-engine > /dev/null 2>&1
         
-    }
+    } & show_progress 100
+    echo "Update bootnode already done .."
     ;;
 
     4)
